@@ -11,6 +11,8 @@ class drone(bge.types.KX_PythonComponent):
         'Body': ''
     }
 
+    tags = {
+    }
     def start(self, args):
 
         scene = bge.logic.getCurrentScene()
