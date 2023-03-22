@@ -4,14 +4,14 @@ from bge import *
 class drone(bge.types.KX_PythonComponent):
 
     args = {
-        'FL_Prop': '',
-        'FR_Prop': '',
-        'BL_Prop': '',
-        'FR_Prop': '',
-        'Body': '',
+        'FL_PROP': '',
+        'FR_PROP': '',
+        'BL_PROP': '',
+        'BR_PROP': '',
+        'BODY': '',
         'prop_rot': float(),
         'prop_mass': float(),
-
+        'body_mass': float(),
     }
 
     def start(self, args):
@@ -19,8 +19,20 @@ class drone(bge.types.KX_PythonComponent):
         scene = bge.logic.getCurrentScene()
         prefarbs = scene.objects
 
-        self.FL_Prop = prefarbs[args['FL_Prop']]
+        self.FL_PROP = prefarbs[args['FL_PROP']]
+        self.FR_PROP = prefarbs[args['FR_PROP']]
+        self.BL_PROP = prefarbs[args['BL_PROP']]
+        self.BR_PROP = prefarbs[args['BR_PROP']]
+        self.BODY    = prefarbs[args['BODY']]
 
+        self.prop_rot = args['prop_rot']
+        self.prop_mass = args['prop_mass']
+        self.body_mass = args['body_mass']
+
+        # Propellers container
+        props = [
+            self.FL_PROP, self.FR_PROP, self.BL_PROP,self.BR_PROP
+        ]
 
     def update(self):
-        self.FL_Prop.applyMovement([0.02,0,0], True)
+        pass
