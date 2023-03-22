@@ -8,11 +8,12 @@ class drone(bge.types.KX_PythonComponent):
         'FR_Prop': '',
         'BL_Prop': '',
         'FR_Prop': '',
-        'Body': ''
+        'Body': '',
+        'prop_rot': float(),
+        'prop_mass': float(),
+
     }
 
-    tags = {
-    }
     def start(self, args):
 
         scene = bge.logic.getCurrentScene()
