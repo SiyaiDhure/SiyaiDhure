@@ -1,5 +1,5 @@
 import bge
 from bge import *
 
-class drone(types.KX_Python_component):
+class drone(types.KX_PythonComponent):
   
