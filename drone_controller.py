@@ -29,10 +29,15 @@ class drone(bge.types.KX_PythonComponent):
         self.prop_mass = args['prop_mass']
         self.body_mass = args['body_mass']
 
-        # Propellers container
+        # Props container
+
         props = [
             self.FL_PROP, self.FR_PROP, self.BL_PROP,self.BR_PROP
         ]
+
+        # Game Properties
+        self.speed = self.object['speed']
+        
 
     def update(self):
         pass
