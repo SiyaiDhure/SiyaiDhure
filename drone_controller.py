@@ -59,31 +59,6 @@ class drone(bge.types.KX_PythonComponent):
             BL_pos   = self.props[2].worldPosition
             BR_pos   = self.props[3].worldPosition
 
-            bge.constraints.createConstraint(
-                # FRONT LEFT PROP PHYSUCS CONSTRAINT
-                self.physicsId[0],
-                self.physicsId[1],
-                constraint_type = const,
-                pivot_x = self.pivot.x,
-                pivot_y = self.pivot.y,
-                pivot_z = self.pivot.z,
-                axis_x = self.axis.x,
-                axis_y = self.axis.y,
-                axis_z = self.axis.z,
-                flag = 0)
-            
-            bge.constraints.createConstraint(
-                # FRONT RIGHT PROP PHYSUCS CONSTRAINT
-                self.physicsId[0],
-                self.physicsId[2],
-                constraint_type = const,
-                pivot_x = self.pivot.x,
-                pivot_y = self.pivot.y,
-                pivot_z = self.pivot.z,
-                axis_x = self.axis.x,
-                axis_y = self.axis.y,
-                axis_z = self.axis.z,
-                flag = 0)
             
     def update(self):
 
