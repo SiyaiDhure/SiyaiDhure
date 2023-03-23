@@ -1,5 +1,6 @@
 import bge
 from bge import *
+from mathutils import *
 
 class drone(bge.types.KX_PythonComponent):
 
@@ -12,6 +13,9 @@ class drone(bge.types.KX_PythonComponent):
         'prop_rot': float(),
         'prop_mass': float(),
         'body_mass': float(),
+        'pivot': Vector(),
+        'axis': Vector(),
+        'balance': float()
     }
 
     def start(self, args):
@@ -29,15 +33,63 @@ class drone(bge.types.KX_PythonComponent):
         self.prop_mass = args['prop_mass']
         self.body_mass = args['body_mass']
 
-        # Props container
+        self.pivot = args['pivot']
+        self.axis  = args['axis']
+        self.balance = args['balance']
 
-        props = [
+        self.props = [
             self.FL_PROP, self.FR_PROP, self.BL_PROP,self.BR_PROP
         ]
 
-        # Game Properties
-        self.speed = self.object['speed']
-        
+        self.physicsId = [
 
+            self.BODY.getPhysicsId(),
+            self.props[0].getPhysicsId(),
+            self.props[1].getPhysicsId(),
+            self.props[2].getPhysicsId(),
+            self.props[3].getPhysicsId(),
+
+        ]
+
+        class droneParts_assemple():
+            
+            const = int(1)
+            FL_pos   = self.props[0].worldPosition
+            FR_pos   = self.props[1].worldPosition
+            BL_pos   = self.props[2].worldPosition
+            BR_pos   = self.props[3].worldPosition
+
+            bge.constraints.createConstraint(
+                # FRONT LEFT PROP PHYSUCS CONSTRAINT
+                self.physicsId[0],
+                self.physicsId[1],
+                constraint_type = const,
+                pivot_x = self.pivot.x,
+                pivot_y = self.pivot.y,
+                pivot_z = self.pivot.z,
+                axis_x = self.axis.x,
+                axis_y = self.axis.y,
+                axis_z = self.axis.z,
+                flag = 0)
+            
+            bge.constraints.createConstraint(
+                # FRONT RIGHT PROP PHYSUCS CONSTRAINT
+                self.physicsId[0],
+                self.physicsId[2],
+                constraint_type = const,
+                pivot_x = self.pivot.x,
+                pivot_y = self.pivot.y,
+                pivot_z = self.pivot.z,
+                axis_x = self.axis.x,
+                axis_y = self.axis.y,
+                axis_z = self.axis.z,
+                flag = 0)
+            
     def update(self):
-        pass
+
+        class balance(self):
+            self.props[0].applyForce([0,0,self.balance], True)
+            self.props[1].applyForce([0,0,self.balance], True)
+            self.props[2].applyForce([0,0,self.balance], True)
+            self.props[3].applyForce([0,0,self.balance], True)
+            bge.constraints.setGravity(0,0,self.body_mass)
