@@ -9,13 +9,15 @@ class drone(bge.types.KX_PythonComponent):
         'FR_PROP': '',
         'BL_PROP': '',
         'BR_PROP': '',
+        'FL_Controller': '',
+        'FR_Controller': '',
+        'BL_Controller': '',
+        'BR_Controller': '',
         'BODY': '',
-        'prop_rot': float(),
         'prop_mass': float(),
         'body_mass': float(),
-        'pivot': Vector(),
-        'axis': Vector(),
-        'balance': float()
+        'Prop speed': float(),
+        'Force' : float()
     }
 
     def start(self, args):
@@ -23,27 +25,29 @@ class drone(bge.types.KX_PythonComponent):
         scene = bge.logic.getCurrentScene()
         prefarbs = scene.objects
 
-        self.FL_PROP = prefarbs[args['FL_PROP']]
-        self.FR_PROP = prefarbs[args['FR_PROP']]
-        self.BL_PROP = prefarbs[args['BL_PROP']]
-        self.BR_PROP = prefarbs[args['BR_PROP']]
         self.BODY    = prefarbs[args['BODY']]
 
-        self.prop_rot = args['prop_rot']
         self.prop_mass = args['prop_mass']
         self.body_mass = args['body_mass']
-
-        self.pivot = args['pivot']
-        self.axis  = args['axis']
-        self.balance = args['balance']
+        self.prop_rotation_speed = args['Prop speed']
+        self.force = args['Force']
 
         self.props = [
-            self.FL_PROP, self.FR_PROP, self.BL_PROP,self.BR_PROP
+            prefarbs[args['FL_PROP']],
+            prefarbs[args['FR_PROP']],
+            prefarbs[args['BL_PROP']],
+            prefarbs[args['BR_PROP']]
+        ]
+
+        self.prop_controller = [
+            prefarbs[args['FL_Controller']],
+            prefarbs[args['FR_Controller']],
+            prefarbs[args['BL_Controller']],
+            prefarbs[args['BR_Controller']]
         ]
 
         self.physicsId = [
 
-            self.BODY.getPhysicsId(),
             self.props[0].getPhysicsId(),
             self.props[1].getPhysicsId(),
             self.props[2].getPhysicsId(),
@@ -51,44 +55,78 @@ class drone(bge.types.KX_PythonComponent):
 
         ]
 
-        class droneParts_assemple():
-            
-            const = int(1)
-            FL_pos   = self.props[0].worldPosition
-            FR_pos   = self.props[1].worldPosition
-            BL_pos   = self.props[2].worldPosition
-            BR_pos   = self.props[3].worldPosition
-            
-            bge.constraints.createConstraint(
-                self.physicsId[0] , self.physicsId[1] , constraint_type = const,
-                pivot_x = self.pivot.x , pivot_y = self.pivot.y , pivot_z = self.pivot.z,
-                axis_x = self.axis.x , axis_y = self.axis.y , axis_z = self.axis.z, flag = 0
-                
-                )
-            
-            bge.constraints.createConstraint(
-                self.physicsId[0] , self.physicsId[2] , constraint_type = const,
-                pivot_x = self.pivot.x, pivot_y = self.pivot.y, pivot_z = self.pivot.z,
-                axis_x = self.axis.x, axis_y = self.axis.y, axis_z = self.axis.z, flag = 0
-                )
-            
-            bge.constraints.createConstraint(
-                self.physicsId[0], self.physicsId[3] , constraint_type = const,
-                pivot_x = -self.pivot.x, pivot_y = -self.pivot.y, pivot_z = -self.pivot.z,
-                axis_x = -self.axis.x, axis_y = -self.axis.y, axis_z = -self.axis.z, flag = 0
-                )
-            
-            bge.constraints.createConstraint(
-                self.physicsId[0], self.physicsId[4], constraint_type = const,
-                pivot_x = -self.pivot.x, pivot_y = -self.pivot.y, pivot_z = -self.pivot.z,
-                axis_x = -self.axis.x, axis_y = -self.axis.y, axis_z = -self.axis.z, flag = 0
-                )
-            
-    def update(self):
+#.................DRONE LOGIC(don't modify !!!)......................................
 
-        class balance(self):
-            self.props[0].applyForce([0,0,self.balance], True)
-            self.props[1].applyForce([0,0,self.balance], True)
-            self.props[2].applyForce([0,0,self.balance], True)
-            self.props[3].applyForce([0,0,self.balance], True)
-            bge.constraints.setGravity(0,0,self.body_mass)
+    def drop(self):
+        pass
+
+    def forward(self):
+        pass
+
+    def backward():
+        pass
+
+    def yaw_clock_wise(self):
+        pass
+
+    def yaw_anti_clock_wise(self):
+        pass
+#....................................................................................
+    def update(self):
+        p_or_mZ = float(0.02)
+        keyboard = logic.keyboard
+
+        up = keyboard.inputs[bge.events.UPARROWKEY]
+
+
+        active = logic.KX_INPUT_ACTIVE
+
+
+        rot = self.prop_rotation_speed*logic.deltaTime()
+        for p in self.props:
+            if p in self.props:
+                p.applyRotation([0,0,rot], True)
+
+        
+        class assemble_parts():
+
+            global default_parent
+
+            def default_parent(self):
+                self.prop_controller[0].worldPosition = self.props[0].worldPosition
+                self.prop_controller[1].worldPosition = self.props[1].worldPosition
+                self.prop_controller[2].worldPosition = self.props[2].worldPosition
+                self.prop_controller[3].worldPosition = self.props[3].worldPosition
+
+                for cont in self.prop_controller:
+                    if cont in self.prop_controller:
+                        cont.worldPosition.z += p_or_mZ
+            default_parent(self)
+    
+
+        class drive():
+            subZ = 0.02
+
+            global parent
+            def parent(self):
+                self.props[0].worldPosition = self.prop_controller[0].worldPosition
+                self.props[1].worldPosition = self.prop_controller[1].worldPosition
+                self.props[2].worldPosition = self.prop_controller[2].worldPosition
+                self.props[3].worldPosition = self.prop_controller[3].worldPosition
+                
+
+            def lift(self):
+                contr = self.prop_controller
+                props = self.props
+                for _ in contr:
+                    if _ in contr:
+                        _.applyForce([0,0,self.force], True)
+                    for __ in props:
+                        if __ in props:
+                            parent(self)
+                            
+            if active in up.status:
+                lift(self)
+            else:
+                default_parent(self)
+
